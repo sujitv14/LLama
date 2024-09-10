@@ -15,39 +15,24 @@ drive.mount('/content/drive')
 pip install streamlit
 
 import streamlit as st
-from langchain import PromptTemplate, LLMChain
 from ctransformers import AutoModelForCausalLM
+from langchain import PromptTemplate
 
-# Load the LLaMA model using ctransformers
+# Load the model using ctransformers
 model_path = '/content/drive/MyDrive/llama-2-7b-chat.ggmlv3.q8_0.bin'
 llm = AutoModelForCausalLM.from_pretrained(model_path, model_type="llama")
 
-# Create a Langchain PromptTemplate
-template = """
-Question: {question}
-Answer:
-"""
+# Define the prompt template
+prompt = PromptTemplate(template="Question: {question}\nAnswer:", input_variables=["question"])
 
-prompt_template = PromptTemplate(
-    input_variables=["question"],
-    template=template,
-)
+# Use the new RunnableSequence syntax
+chain = prompt | llm
 
-# Streamlit interface
-st.title("LLaMA-2 Chatbot with Langchain")
-
-# User input
+# Streamlit UI for input
+st.title("LLaMA-2 Chatbot")
 question = st.text_input("Enter your question:")
 
-# Generate response when user submits a question
-if question:
-    st.write("Generating response...")
-
-    # Use Langchain PromptTemplate to format the question
-    prompt = prompt_template.format(question=question)
-
-    # Generate the response from the model using ctransformers
-    response = llm(prompt)
-
-    # Display the response
-    st.write(f"Response: {response}")
+if st.button("Generate Answer"):
+    # Run inference
+    response = chain.invoke({"question": question})
+    st.write(f"Answer: {response}")
