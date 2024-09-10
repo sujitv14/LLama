@@ -3,4 +3,3 @@ langchain
 transformers
 sentencepiece
 ctransformers
-llama-cpp-python
