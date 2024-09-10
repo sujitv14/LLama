@@ -7,12 +7,12 @@ Original file is located at
     https://colab.research.google.com/drive/1XZr-mvAYVwrq1eNlw7cJTnUE5KL0mXWJ
 """
 
-!pip install langchain transformers sentencepiece ctransformers
+pip install langchain transformers sentencepiece ctransformers
 
 from google.colab import drive
 drive.mount('/content/drive')
 
-!pip install streamlit
+pip install streamlit
 
 import streamlit as st
 from langchain import PromptTemplate, LLMChain
